@@ -49,6 +49,32 @@ app.get('/todos/:id', (req, res) => {
     });
 });
 
+app.delete('/todos/:id', (req, res) => {
+    // get the id
+    let id = req.params.id;
+
+    // validate the id -> no vslid? return a 404
+    if(!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
+
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if(!todo) {
+            res.status(404).senb();
+        }
+
+        res.send(JSON.stringify(todo, undefined, 2));
+    }).catch((e) => {
+        res.status(400).send();
+    })
+    // remove todo by id
+        //sucess
+            // if no doc, send 404
+            // id doc send doc back with a 200
+        //error
+            // 400 with empty body
+})
+
 app.listen(port, () => {
     console.log(`Started on port ${port}`);
 })
